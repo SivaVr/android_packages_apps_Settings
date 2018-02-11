@@ -127,6 +127,11 @@
         <!-- Expanded desktop -->
         <org.cyanogenmod.internal.cmparts.CMPartsPreference
                 android:key="expanded_desktop_settings" />
+         
+        <com.android.settings.display.ThemePreference
+            android:key="theme"
+            android:icon="@drawable/rr_color_engine_icon"
+            android:title="@string/theme" />
 
         <PreferenceScreen
                 android:key="font_size"

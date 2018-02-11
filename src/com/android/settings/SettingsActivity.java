@@ -638,22 +638,7 @@ public class SettingsActivity extends SettingsDrawerActivity
                 || className.equals(Settings.PersonalSettings.class.getName())
                 || className.equals(Settings.WirelessSettings.class.getName());
 
-        // This is a "Sub Settings" when:
-        // - this is a real SubSettings
-        // - or :settings:show_fragment_as_subsetting is passed to the Intent
-        final boolean isSubSettings = this instanceof SubSettings ||
-                intent.getBooleanExtra(EXTRA_SHOW_FRAGMENT_AS_SUBSETTING, false);
-
-        // If this is a sub settings, then apply the SubSettings Theme for the ActionBar content insets
-        if (isSubSettings) {
-            // Check also that we are not a Theme Dialog as we don't want to override them
-            final int themeResId = getThemeResId();
-            if (themeResId != R.style.Theme_DialogWhenLarge &&
-                    themeResId != R.style.Theme_SubSettingsDialogWhenLarge) {
-                setTheme(R.style.Theme_SubSettings);
-            }
-        }
-
+      
         setContentView(mIsShowingDashboard ?
                 R.layout.settings_main_dashboard : R.layout.settings_main_prefs);
 

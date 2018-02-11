@@ -18,6 +18,7 @@ package com.android.settings.deviceinfo;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.view.View;
@@ -26,20 +27,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.settings.R;
+import com.android.settings.Utils;
 
 public class StorageSummaryPreference extends Preference {
     private int mPercent = -1;
     private int mSecondaryColor;
+    private int mAccentColor;
+
+    private boolean mThemeEnabled;
 
     public StorageSummaryPreference(Context context) {
         super(context);
 
         setLayoutResource(R.layout.storage_summary);
         setEnabled(false);
-
+        
+        mThemeEnabled = Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.THEME_ACCENT_COLOR, 0) != 0;
+        
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.textColorSecondary, typedValue, true);
         mSecondaryColor = context.getResources().getColor(typedValue.resourceId);
+        mAccentColor = Utils.getColorAccent(context);
     }
 
     public void setPercent(int percent) {
@@ -56,7 +65,12 @@ public class StorageSummaryPreference extends Preference {
         } else {
             progress.setVisibility(View.GONE);
         }
-
+        
+        if (mThemeEnabled) {
+            final TextView title = (TextView) view.findViewById(android.R.id.title);
+            title.setTextColor(mAccentColor);
+        }
+        
         final TextView summary = (TextView) view.findViewById(android.R.id.summary);
         summary.setTextColor(mSecondaryColor);
 

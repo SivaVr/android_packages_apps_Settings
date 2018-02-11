@@ -18,6 +18,9 @@ package com.android.settings;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;

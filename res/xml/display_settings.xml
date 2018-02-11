@@ -130,7 +130,7 @@
          
         <com.android.settings.display.ThemePreference
             android:key="theme"
-            android:icon="@drawable/rr_color_engine_icon"
+            android:icon="@drawable/icon_color_engine_icon"
             android:title="@string/theme" />
 
         <PreferenceScreen

@@ -127,12 +127,7 @@
         <!-- Expanded desktop -->
         <org.cyanogenmod.internal.cmparts.CMPartsPreference
                 android:key="expanded_desktop_settings" />
-         
-        <com.android.settings.display.ThemePreference
-            android:key="theme"
-            android:icon="@drawable/icon_color_engine_icon"
-            android:title="@string/theme" />
-
+       
         <PreferenceScreen
                 android:key="font_size"
                 android:title="@string/title_font_size"
@@ -170,5 +165,11 @@
                 android:title="@string/display_vr_pref_title" />
 
     </PreferenceCategory>
-
+    <PreferenceCategory
+            android:title="@string/theme_title">
+             <com.android.settings.display.ThemePreference
+                 android:key="theme"
+                 android:icon="@drawable/icon_color_engine_icon"
+                 android:title="@string/theme" />
+    </PreferenceCategory>
 </PreferenceScreen>

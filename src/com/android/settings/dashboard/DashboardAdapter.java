@@ -100,7 +100,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         mSuggestionParser = parser;
         mConditions = conditions;
         
-        final TypedArray ta = context.obtainStyledAttributes(new int[]{
+         final TypedArray ta = context.obtainStyledAttributes(new int[]{
             android.R.attr.colorAccent,
             android.R.attr.colorPrimary});
         mAccentColor = ta.getColor(0, 0);
@@ -108,9 +108,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         ta.recycle();
 
         int accentColor = Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.THEME_ACCENT_COLOR, 0);
+                Settings.Secure.THEME_ACCENT_COLOR, 1);
         int primaryColor = Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.THEME_PRIMARY_COLOR, 0);
+                Settings.Secure.THEME_PRIMARY_COLOR, 2);
 
         mThemeEnabled = accentColor != 0 || primaryColor != 0;
         mDarkThemeEnabled = primaryColor == 3 || primaryColor == 1;

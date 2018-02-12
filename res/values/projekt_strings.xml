@@ -28,25 +28,28 @@
    <!-- Force authorize substratum packages -->
    <string name="force_authorize_substratum_packages_title">Force authorize every theme app</string>
    <string name="force_authorize_substratum_packages_summary">Allow theme apps from unknown sources</string>
-    <!-- Color engine -->
+  <!-- Color engine -->
     <string name="theme_switch_palette">Switch between primary and accent colors</string>
     <string name="theme_title">Color engine</string>
     <string name="theme_summary">Select different colors for your current theme</string>
     <string name="theme_accent_color">Accent color</string>
-    <string name="theme_primary_color">Primary/background color</string>
+    <string name="theme_primary_color">Primary color</string>
     <string name="theme">Theme</string>
-    <string name="oms_enabled">Theme modes unavailable because a Substratum theme overlay is currently installed.Please UNINSTALL theme overlay (not disable).</string>
-    <string name="red">Red</string>
-    <string name="orange">Amber</string>
-    <string name="blue">Teal</string>
-    <string name="green">Green</string>
-    <string name="yellow">Yellow</string>
-    <string name="purple">Purple</string>
-    <string name="pink">Pink</string>
+    <string name="oms_enabled">Theme modes unavailable because a Substratum theme is currently applied</string>
+    <string name="red">Torch Red</string>
+    <string name="orange">Vermilion</string>
+    <string name="blue">Pixel Blue</string>
+    <string name="green">Lima</string>
+    <string name="yellow">Supernova</string>
+    <string name="purple">Purple Heat</string>
+    <string name="pink">Rose</string>
     <string name="dark">Dark</string>
     <string name="pixel">Pixel</string>
     <string name="teal">Default</string>
-    <string name="cyan">Cyan</string>
+    <string name="cyan">Scooter</string>
     <string name="grey">Grey</string>
-    <string name="default_string">Default</string> 
+    <string name="default_string">Default</string>
+    <string name="theme_force_enabled_title">Force enable theme</string>
+    <string name="theme_force_enabled_summary">Theme will be forcibly enabled nonetheless OMS state</string>
+
 </resources>

@@ -412,6 +412,20 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             int value = Settings.Secure.getInt(getContentResolver(), CAMERA_GESTURE_DISABLED, 0);
             mCameraGesturePreference.setChecked(value == 0);
         }
+        if (mThemePreference != null) {
+            final int accentColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_ACCENT_COLOR, 1);
+            final int primaryColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_PRIMARY_COLOR, 2);
+            mThemePreference.setSummary(PreviewSeekBarPreferenceFragment.getInfoText(getContext(),
+                    false, accentColorValue, primaryColorValue) + ", " +
+                    PreviewSeekBarPreferenceFragment.getInfoText(getContext(), true,
+                    accentColorValue, primaryColorValue));
+            if (ThemeManager.shouldOverlayEnabled(getContext())) {
+                mThemePreference.setEnabled(false);
+                mThemePreference.setSummary(R.string.oms_enabled);
+            }
+        }
     }
 
     private void updateScreenSaverSummary() {
@@ -475,6 +489,20 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 uiManager.setNightMode(value);
             } catch (NumberFormatException e) {
                 Log.e(TAG, "could not persist night mode setting", e);
+            }
+        }
+        if (mThemePreference != null) {
+            final int accentColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_ACCENT_COLOR, 1);
+            final int primaryColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_PRIMARY_COLOR, 2);
+            mThemePreference.setSummary(PreviewSeekBarPreferenceFragment.getInfoText(getContext(),
+                    false, accentColorValue, primaryColorValue) + ", " +
+                    PreviewSeekBarPreferenceFragment.getInfoText(getContext(), true,
+                    accentColorValue, primaryColorValue));
+            if (ThemeManager.shouldOverlayEnabled(getContext())) {
+                mThemePreference.setEnabled(false);
+                mThemePreference.setSummary(R.string.oms_enabled);
             }
         }
         return true;

@@ -108,7 +108,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mTapToWakePreference;
     private SwitchPreference mAutoBrightnessPreference;
     private SwitchPreference mCameraGesturePreference;
-
+    private ThemePreference mThemePreference;
     @Override
     protected int getMetricsCategory() {
         return MetricsEvent.DISPLAY;
@@ -271,6 +271,21 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             final int currentNightMode = uiManager.getNightMode();
             mNightModePreference.setValue(String.valueOf(currentNightMode));
             mNightModePreference.setOnPreferenceChangeListener(this);
+        }
+        mThemePreference = (ThemePreference) findPreference(KEY_THEME);
+        if (mThemePreference != null) {
+            final int accentColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_ACCENT_COLOR, 1);
+            final int primaryColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
+                    Settings.Secure.THEME_PRIMARY_COLOR, 2);
+            mThemePreference.setSummary(PreviewSeekBarPreferenceFragment.getInfoText(getContext(),
+                    false, accentColorValue, primaryColorValue) + ", " +
+                    PreviewSeekBarPreferenceFragment.getInfoText(getContext(), true,
+                    accentColorValue, primaryColorValue));
+            if (ThemeManager.shouldOverlayEnabled(getContext())) {
+                mThemePreference.setEnabled(false);
+                mThemePreference.setSummary(R.string.oms_enabled);
+            }
         }
     }
 

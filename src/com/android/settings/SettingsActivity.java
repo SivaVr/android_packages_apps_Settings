@@ -624,7 +624,7 @@ public class SettingsActivity extends SettingsDrawerActivity
         if (isSubSettings) {            
             // Check also that we are not a Theme Dialog as we don't want to override them
             final int themeResId = getThemeResId();
-            if (themeResId != R.style.Theme.DialogWhenLarge &&
+            if (themeResId != R.style.Theme_DialogWhenLarge &&
                     themeResId != R.style.Theme_SubSettingsDialogWhenLarge) {
                 // Don't override theme to retain selected accent colors
                 getTheme().applyStyle(R.style.Theme_SubSettings, true);

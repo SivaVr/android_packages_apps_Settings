@@ -156,7 +156,7 @@ public class EncryptionInterstitial extends SettingsActivity {
         @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-           if (view instanceof GlifPreferenceLayout) {
+          if (view instanceof GlifPreferenceLayout) {
                 GlifPreferenceLayout layout = (GlifPreferenceLayout) view;
                 layout.setDividerItemDecoration(new SettingsDividerItemDecoration(getContext()));
 
@@ -172,7 +172,7 @@ public class EncryptionInterstitial extends SettingsActivity {
         @Override
         public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent,
                 Bundle savedInstanceState) {
-            if (parent instanceof GlifPreferenceLayout) {
+             if (parent instanceof GlifPreferenceLayout) {
                 GlifPreferenceLayout layout = (GlifPreferenceLayout) parent;
                 return layout.onCreateRecyclerView(inflater, parent, savedInstanceState);
             }

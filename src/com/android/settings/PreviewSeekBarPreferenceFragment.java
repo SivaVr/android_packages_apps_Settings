@@ -128,8 +128,7 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
         }
     }
     
-    private void switchPalette(int[] colors, int[] bottomColors, int colorValue,
-                               int selectedResId) {
+   private void switchPalette(int[] colors, int colorValue) {
         float sideMargin = getContext().getResources().getDimensionPixelSize(
                 R.dimen.theme_color_margin_side);
         mGrid.removeAllViews();
@@ -142,16 +141,10 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
             final int count = i;
             final boolean selected = colorValue == i;
             final ImageView view = new ImageView(getContext());
-            Drawable[] circleLayers = new Drawable[2];
-            circleLayers[0] = getContext().getDrawable(R.drawable.color_circle_bottom);
-            circleLayers[1] = getContext().getDrawable(R.drawable.color_circle_top);
-            circleLayers[0].setTint(bottomColors[i]);
-            circleLayers[1].setTint(color);
-            ((ClipDrawable) circleLayers[0]).setLevel(5000);
-            ((ClipDrawable) circleLayers[1]).setLevel(5000);
-            view.setImageDrawable(new LayerDrawable(circleLayers));
+            view.setImageDrawable(getContext().getDrawable(R.drawable.color_circle));
+            view.setColorFilter(color);
             if (selected) {
-                view.setForeground(getContext().getDrawable(selectedResId));
+                view.setForeground(getContext().getDrawable(R.drawable.ic_check));
                 view.setForegroundGravity(Gravity.CENTER);
             }
             view.setOnClickListener(new OnClickListener() {
@@ -180,23 +173,20 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
         mGrid = (LinearLayout) content.findViewById(R.id.grid_view);
         if (mGrid != null) {
             mAccentShowing = Settings.Secure.getInt(getContext().getContentResolver(),
-                    Settings.Secure.THEME_SETTINGS_MODE, 1) == 1;
+                    Settings.Secure.THEME_SETTINGS_MODE, 0) == 1;
             mAccentColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
-                    Settings.Secure.THEME_ACCENT_COLOR, 0);
+                    Settings.Secure.THEME_ACCENT_COLOR, 1);
             mPrimaryColorValue = Settings.Secure.getInt(getContext().getContentResolver(),
-                    Settings.Secure.THEME_PRIMARY_COLOR, 0);
+                    Settings.Secure.THEME_PRIMARY_COLOR, 2);
             final int[] accentColors = getContext().getResources().getIntArray(
                     R.array.accent_colors);
             final int[] primaryColors = getContext().getResources().getIntArray(
                     R.array.primary_colors);
-            final int[] bgColors = getContext().getResources().getIntArray(
-                    R.array.background_colors);
             if (mAccentShowing) {
-                switchPalette(accentColors, accentColors, mAccentColorValue, R.drawable.ic_check);
+                switchPalette(accentColors, mAccentColorValue);
                 getActivity().setTitle(R.string.theme_accent_color);
             } else {
-                switchPalette(primaryColors, bgColors, mPrimaryColorValue,
-                        R.drawable.ic_check_accent);
+                switchPalette(primaryColors, mPrimaryColorValue);
                 getActivity().setTitle(R.string.theme_primary_color);
             }
             mAnimation = AnimationUtils.loadAnimation(getContext(),
@@ -207,13 +197,11 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
                 public void onAnimationStart(Animation animation) {
                     if (!mAccentShowing) {
                         mAccentShowing = true;
-                        switchPalette(accentColors, accentColors, mAccentColorValue,
-                                R.drawable.ic_check);
+                        switchPalette(accentColors, mAccentColorValue);
                         getActivity().setTitle(R.string.theme_accent_color);
                     } else {
                         mAccentShowing = false;
-                        switchPalette(primaryColors, bgColors, mPrimaryColorValue,
-                                R.drawable.ic_check_accent);
+                        switchPalette(primaryColors, mPrimaryColorValue);
                         getActivity().setTitle(R.string.theme_primary_color);
                     }
                     Settings.Secure.putInt(getContext().getContentResolver(),
@@ -234,7 +222,6 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
                         mPrimaryColorValue));
             }
         }
-        
         mLabel = (TextView) content.findViewById(R.id.current_label);
 
         // The maximum SeekBar value always needs to be non-zero. If there's
@@ -277,7 +264,6 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
                 seekBar.setEnabled(false);
             }
         }
-
         final Context context = getContext();
         final Configuration origConfig = context.getResources().getConfiguration();
         final boolean isLayoutRtl = origConfig.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
@@ -295,14 +281,15 @@ public abstract class PreviewSeekBarPreferenceFragment extends SettingsPreferenc
 
         mPageIndicator = (DotsPageIndicator) content.findViewById(R.id.page_indicator);
         if (mPageIndicator != null) {
-            if (mPreviewSampleResIds.length > 1) {
-                mPageIndicator.setViewPager(mPreviewPager);
-                mPageIndicator.setVisibility(View.VISIBLE);
-                mPageIndicator.setOnPageChangeListener(mPageIndicatorPageChangeListener);
-            } else {
-                mPageIndicator.setVisibility(View.GONE);
+                mPageIndicator.requestLayout();
+                if (mPreviewSampleResIds.length > 1) {
+                    mPageIndicator.setViewPager(mPreviewPager);
+                    mPageIndicator.setVisibility(View.VISIBLE);
+                    mPageIndicator.setOnPageChangeListener(mPageIndicatorPageChangeListener);
+                } else {
+                    mPageIndicator.setVisibility(View.GONE);
+                }
             }
-        }
 
         setPreviewLayer(mInitialIndex, false);
         return root;

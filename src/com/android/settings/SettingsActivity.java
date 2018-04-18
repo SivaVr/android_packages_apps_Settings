@@ -20,6 +20,8 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.IThemeCallback;
+import android.app.ThemeManager;
 import android.content.ActivityNotFoundException;
 import android.app.ActionBar;
 import android.content.BroadcastReceiver;
@@ -36,8 +38,11 @@ import android.content.res.Configuration;
 import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings.Secure;
 import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
@@ -395,7 +400,24 @@ public class SettingsActivity extends SettingsDrawerActivity
             }
         }
     };
+    private int mTheme;
 
+    private ThemeManager mThemeManager;
+    private final IThemeCallback mThemeCallback = new IThemeCallback.Stub() {
+
+        @Override
+        public void onThemeChanged(int themeMode, int color) {
+            onCallbackAdded(themeMode, color);
+            SettingsActivity.this.runOnUiThread(() -> {
+                SettingsActivity.this.recreate();
+            });
+        }
+
+        @Override
+        public void onCallbackAdded(int themeMode, int color) {
+            mTheme = color;
+        }
+    };
     private final BroadcastReceiver mUserAddRemoveReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -533,6 +555,22 @@ public class SettingsActivity extends SettingsDrawerActivity
 
     @Override
     protected void onCreate(Bundle savedState) {
+            
+        final int themeMode = Secure.getInt(getContentResolver(),
+                Secure.THEME_PRIMARY_COLOR, 2);
+        final int accentColor = Secure.getInt(getContentResolver(),
+                Secure.THEME_ACCENT_COLOR, 1);
+        mThemeManager = (ThemeManager) getSystemService(Context.THEME_SERVICE);
+        if (mThemeManager != null) {
+            mThemeManager.addCallback(mThemeCallback);
+        }
+        setTheme(R.style.Theme_Settings);
+        if (themeMode != 0 || accentColor != 0) {
+            getTheme().applyStyle(mTheme, true);
+        }
+        if (themeMode == 2) {
+            getTheme().applyStyle(R.style.settings_pixel_theme, true);
+        }
         super.onCreate(savedState);
         long startTime = System.currentTimeMillis();
 
@@ -576,7 +614,6 @@ public class SettingsActivity extends SettingsDrawerActivity
                 || className.equals(Settings.DeviceSettings.class.getName())
                 || className.equals(Settings.PersonalSettings.class.getName())
                 || className.equals(Settings.WirelessSettings.class.getName());
-
         // This is a "Sub Settings" when:
         // - this is a real SubSettings
         // - or :settings:show_fragment_as_subsetting is passed to the Intent
@@ -584,15 +621,16 @@ public class SettingsActivity extends SettingsDrawerActivity
                 intent.getBooleanExtra(EXTRA_SHOW_FRAGMENT_AS_SUBSETTING, false);
 
         // If this is a sub settings, then apply the SubSettings Theme for the ActionBar content insets
-        if (isSubSettings) {
+        if (isSubSettings) {            
             // Check also that we are not a Theme Dialog as we don't want to override them
             final int themeResId = getThemeResId();
             if (themeResId != R.style.Theme_DialogWhenLarge &&
                     themeResId != R.style.Theme_SubSettingsDialogWhenLarge) {
-                setTheme(R.style.Theme_SubSettings);
+                // Don't override theme to retain selected accent colors
+                getTheme().applyStyle(R.style.Theme_SubSettings, true);
             }
         }
-
+      
         setContentView(mIsShowingDashboard ?
                 R.layout.settings_main_dashboard : R.layout.settings_main_prefs);
 
